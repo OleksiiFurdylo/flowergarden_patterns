@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -17,56 +18,61 @@ import static org.mockito.Mockito.when;
 public class MarriedBouquetTest {
 
     private MarriedBouquet marriedBouquet;
-    private GeneralFlower firstFlower = new Chamomile(0, 4, 15, null);
-    private GeneralFlower secondFlower = new Rose(true, 7, 20, null);
-    private GeneralFlower thirdFlower = new Chamomile(0, 10, 20, null);
+
+    private Rose rose = mock(Rose.class);
+    private Chamomile chamomile = mock(Chamomile.class);
+    private Tulip tulip = mock(Tulip.class);
 
     @Before
     public void initMarriedBouqet() {
         marriedBouquet = new MarriedBouquet();
-        marriedBouquet.addFlower(firstFlower);
-        marriedBouquet.addFlower(secondFlower);
-        marriedBouquet.addFlower(thirdFlower);
+        marriedBouquet.addFlower(rose);
+        marriedBouquet.addFlower(chamomile);
+        marriedBouquet.addFlower(tulip);
     }
 
     @Test
-    public void getPriceTest()  {
-        marriedBouquet.setAssembledPrice(120);
-        float expected = marriedBouquet.getAssembledPrice()
-                +firstFlower.getPrice()
-                +secondFlower.getPrice()
-                +thirdFlower.getPrice();
-
-        Assert.assertEquals(expected, marriedBouquet.getPrice(), 0.0);
-    }
-
-    @Test
-    public void searchFlowersByLenghtTest() {
-        List<GeneralFlower> expected = Arrays.asList(secondFlower, thirdFlower);
-        Assert.assertEquals(expected, marriedBouquet.searchFlowersByLenght(5, 10));
-    }
-
-    @Test
-    public void getPriceEquals135WithMockTest() {
-        Rose rose = mock(Rose.class);
-        Chamomile chamomile = mock(Chamomile.class);
-        Tulip tulip = mock(Tulip.class);
-
-        MarriedBouquet anotherMarriedBouqet = new MarriedBouquet();
-        anotherMarriedBouqet.setAssembledPrice(100);
-        anotherMarriedBouqet.addFlower(rose);
-        anotherMarriedBouqet.addFlower(chamomile);
-        anotherMarriedBouqet.addFlower(tulip);
+    public void getPriceEquals135Test()  {
+        marriedBouquet.setAssembledPrice(100);
 
         when(rose.getPrice()).thenReturn(10f);
         when(chamomile.getPrice()).thenReturn(20f);
         when(tulip.getPrice()).thenReturn(5f);
 
-        float expected = anotherMarriedBouqet.getAssembledPrice()
+        float expected = marriedBouquet.getAssembledPrice()
                 +rose.getPrice()
                 +chamomile.getPrice()
                 +tulip.getPrice();
-        Assert.assertEquals(expected, anotherMarriedBouqet.getPrice(), 0.0);
+        Assert.assertEquals(expected, marriedBouquet.getPrice(), 0.0);
+    }
+
+    @Test
+    public void searchFlowersByLenght() {
+        when(rose.getLenght()).thenReturn(26);
+        when(chamomile.getLenght()).thenReturn(16);
+        when(tulip.getLenght()).thenReturn(6);
+
+        Collection<GeneralFlower> searchActualResults = marriedBouquet.searchFlowersByLenght(15, 30);
+
+        Assert.assertEquals(Arrays.asList(rose, chamomile), searchActualResults);
+        Assert.assertEquals(searchActualResults.size(), 2);
+        Assert.assertTrue(searchActualResults.contains(rose));
+        Assert.assertTrue(searchActualResults.contains(chamomile));
+    }
+
+    @Test
+    public void searchStraightForwardFlowersByLenghtTest() {
+        GeneralFlower firstFlower = new Chamomile(0, 4, 15, null);
+        GeneralFlower secondFlower = new Rose(true, 7, 20, null);
+        GeneralFlower thirdFlower = new Chamomile(0, 10, 20, null);
+
+        MarriedBouquet anotherMarriedBouqet = new MarriedBouquet();
+        anotherMarriedBouqet.addFlower(firstFlower);
+        anotherMarriedBouqet.addFlower(secondFlower);
+        anotherMarriedBouqet.addFlower(thirdFlower);
+
+        List<GeneralFlower> expected = Arrays.asList(secondFlower, thirdFlower);
+        Assert.assertEquals(expected, anotherMarriedBouqet.searchFlowersByLenght(5, 10));
     }
 
 }
