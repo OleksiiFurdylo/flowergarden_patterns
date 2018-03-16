@@ -1,6 +1,7 @@
 package com.flowergarden.DAO;
 
 import com.flowergarden.flowers.Flower;
+import com.flowergarden.flowers.FlowerWrapper;
 import com.flowergarden.flowers.GeneralFlower;
 
 import java.io.IOException;
