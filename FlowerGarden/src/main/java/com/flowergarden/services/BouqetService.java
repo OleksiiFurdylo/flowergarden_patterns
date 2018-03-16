@@ -2,6 +2,9 @@ package com.flowergarden.services;
 
 import com.flowergarden.DAO.impl.BouqetDAOimpl;
 import com.flowergarden.DAO.impl.FlowerDAOimpl;
+import com.flowergarden.flowers.Rose;
+import com.flowergarden.properties.FreshnessInteger;
+
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
@@ -43,6 +46,10 @@ public class BouqetService {
         //get assemble price
         bouqetDAOimpl.setConnection(conn);
         assemblePrice = bouqetDAOimpl.getAssemblePriceForBouqet(bouqetId);
+
+        /*Rose rose = new Rose(true, 19, 12, new FreshnessInteger(1));
+        rose.setBouquetId(2);
+        flowerDAOimpl.addFlower(rose);*/
 
         return priceOfFlowersTogeather + assemblePrice;
     }
