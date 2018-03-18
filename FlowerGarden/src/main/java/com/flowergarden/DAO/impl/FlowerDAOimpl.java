@@ -16,8 +16,8 @@ public class FlowerDAOimpl implements FlowerDAO {
     private ArrayList<Float> resultArrayListWithPricesForBouqet = new ArrayList<>();
 
     @Override
-    public ArrayList<Flower> getAllFlowers() {
-        ArrayList<Flower> allFlowers = new ArrayList<>();
+    public ArrayList<FlowerWrapper> getAllFlowers() {
+        ArrayList<FlowerWrapper> allFlowers = new ArrayList<>();
         FlowerWrapper flower = new FlowerWrapper();
 
         try {
@@ -46,13 +46,14 @@ public class FlowerDAOimpl implements FlowerDAO {
     }
 
     @Override
-    public GeneralFlower getFlower(int id) {
+    public FlowerWrapper getFlower(int id) {
         FlowerWrapper flowerWrapper = new FlowerWrapper();
 
 
         try {
-            Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery("SELECT * FROM flower WHERE id= " + id);
+            PreparedStatement st = conn.prepareStatement("SELECT * FROM flower WHERE id= ?");
+            st.setInt(1, id);
+            ResultSet rs = st.executeQuery();
             flowerWrapper.setId(rs.getInt("id"));
             flowerWrapper.setName(rs.getString("name"));
             flowerWrapper.setLength(rs.getInt("lenght"));//as named in db
@@ -72,21 +73,19 @@ public class FlowerDAOimpl implements FlowerDAO {
         return flowerWrapper;
     }
 
+
     @Override
-    public void updateFlower(Flower flower) {
+    public void updateFlower(FlowerWrapper flower) {
         try {
-            //PreparedStatement st = conn.prepareStatement("UPDATE flower SET bouquet_id = 11, lenght = 122 WHERE id = 2");
             PreparedStatement st = conn.prepareStatement("UPDATE flower SET lenght = ?, " +
                     "freshness = ?, price = ?, petals = ?, spike = ?, bouquet_id = ?  WHERE id =?");
-            st.setFloat(1, flower.getLenght());
-            st.setInt(2, (Integer) flower.getFreshness().getFreshness());
-            st.setInt(2, ((GeneralFlower)flower).getFreshness().getFreshness());
+            st.setFloat(1, flower.getLength());
+            st.setInt(2, flower.getFreshness().getFreshness());
             st.setFloat(3, flower.getPrice());
-            st.setInt(6, ((GeneralFlower) flower).getBouquetId());
-            st.setInt(6, ((FlowerWrapper) flower).getBouquetId());
-            st.setInt(7, ((FlowerWrapper) flower).getId());
-            if(flower instanceof Rose) {st.setBoolean(5, ((Rose) flower).getSpike());}
-            if(flower instanceof Chamomile) {st.setInt(4, ((Chamomile) flower).getPetals());}
+            st.setInt(6, flower.getBouquetId());
+            st.setInt(7, flower.getId());
+            if(flower.getName().equals("rose")) {st.setInt(5, flower.getSpike());}
+            if(flower.getName().equals("chamomile")) {st.setInt(4, flower.getPetals());}
 
             st.executeUpdate();
 
@@ -98,11 +97,11 @@ public class FlowerDAOimpl implements FlowerDAO {
     }
 
     @Override
-    public void deleteFlower(Flower flower) {
-        int id = ((GeneralFlower) flower).getFlowerId();
+    public void deleteFlower(int flowerID) {
+        //int id = ((GeneralFlower) flower).getFlowerId();
         try {
             Statement st = conn.createStatement();
-            st.execute("DELETE FROM flowers WHERE id = "+ id);
+            st.execute("DELETE FROM flowers WHERE id = "+ flowerID);
 
             st.close();
         } catch (SQLException e) {

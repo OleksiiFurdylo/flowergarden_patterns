@@ -13,10 +13,10 @@ import java.util.ArrayList;
  */
 public interface FlowerDAO {
 
-    ArrayList<Flower> getAllFlowers();
-    GeneralFlower getFlower(int id);
-    void updateFlower(Flower flower);
-    void deleteFlower(Flower flower);
+    ArrayList<FlowerWrapper> getAllFlowers();
+    FlowerWrapper getFlower(int id);
+    void updateFlower(FlowerWrapper flower);
+    void deleteFlower(int id);
     void addFlower(Flower flower);
 
     ArrayList<Float> getFlowerPricesForBouqet(int bouqetId) throws IOException;
