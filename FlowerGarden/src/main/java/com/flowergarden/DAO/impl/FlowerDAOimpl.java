@@ -3,6 +3,7 @@ package com.flowergarden.DAO.impl;
 import com.flowergarden.DAO.FlowerDAO;
 import com.flowergarden.flowers.*;
 import com.flowergarden.properties.FreshnessInteger;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,6 +15,16 @@ public class FlowerDAOimpl implements FlowerDAO {
 
     private Connection conn;
     private ArrayList<Float> resultArrayListWithPricesForBouqet = new ArrayList<>();
+
+    public FlowerDAOimpl(DriverManagerDataSource dataSource) {
+        try {
+            this.conn = dataSource.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
     @Override
     public ArrayList<FlowerWrapper> getAllFlowers() {

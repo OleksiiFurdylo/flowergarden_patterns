@@ -1,17 +1,24 @@
 package com.flowergarden.DAO.impl;
 
 import com.flowergarden.DAO.BouqetDAO;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+
+import java.sql.*;
 
 /**
  * Created by OleksiiF on 13.03.2018.
  */
-public class BouqetDAOimpl implements BouqetDAO {
+public class BouquetDAOimpl implements BouqetDAO {
 
     private Connection conn;
+
+    public BouquetDAOimpl(DriverManagerDataSource dataSource) {
+        try {
+            this.conn = dataSource.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public float getAssemblePriceForBouqet(int bouqetId) {
