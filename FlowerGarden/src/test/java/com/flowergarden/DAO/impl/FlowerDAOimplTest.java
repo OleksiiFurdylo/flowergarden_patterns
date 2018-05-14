@@ -24,8 +24,8 @@ import static org.mockito.Mockito.when;
 @ContextConfiguration("classpath:application-context.xml")
 public class FlowerDAOimplTest {
 
-    /*@InjectMocks
-    private FlowerDAOimpl flowerDAOimpl = ;
+    @InjectMocks
+    private FlowerDAOimpl flowerDAOimpl;
 
     @Mock
     private Connection conn;
@@ -101,7 +101,7 @@ public class FlowerDAOimplTest {
         for (Float f: flowerPrices) {price += f;}
         Assert.assertEquals(15.6f, price, 0.1); // one flower in bouquet and assemble price added in service
 
-    }*/
+    }
 
 /*    @Test
     public void setConnection() throws Exception {
